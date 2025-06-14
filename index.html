@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <title>¿Quieres casarte conmigo?</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: "Segoe UI", sans-serif;
+        background: linear-gradient(to bottom right, #ffdce0, #dbeafe);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        text-align: center;
+        overflow: hidden;
+      }
+
+      h1 {
+        color: #e91e63;
+        font-size: 2.5rem;
+        margin: 20px;
+        text-shadow: 1px 1px 2px #fff;
+      }
+
+      img {
+        width: 200px;
+        height: auto;
+        border-radius: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      }
+
+      .buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        justify-content: center;
+      }
+
+      button {
+        padding: 12px 25px;
+        font-size: 1.2rem;
+        border: none;
+        border-radius: 30px;
+        background: #ff4081;
+        color: white;
+        cursor: pointer;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+        transition: transform 0.2s, background 0.3s;
+      }
+
+      button:hover {
+        transform: scale(1.05);
+        background: #e91e63;
+      }
+
+      #noBtn {
+        position: relative;
+      }
+
+      #response {
+        margin-top: 30px;
+        font-size: 1.5rem;
+        color: #6b21a8;
+      }
+
+      #musicBtn {
+        margin-top: 20px;
+        font-size: 1rem;
+        background: #facc15;
+        color: #000;
+      }
+
+      canvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        pointer-events: none;
+        z-index: 999;
+      }
+    </style>
+  </head>
+  <body>
+    <img
+      src="WhatsApp Image 2025-06-13 at 6.32.45 PM.jpeg"
+      alt="Foto de Carito"
+    />
+    <h1>¿Quieres casarte conmigo?</h1>
+
+    <div class="buttons">
+      <button id="yesBtn">Sí ❤️</button>
+      <button id="noBtn">No 💔</button>
+    </div>
+
+    <div id="response"></div>
+
+    <button id="musicBtn">🎵 Tocar "Yellow" de Coldplay</button>
+    <audio
+      id="bgMusic"
+      src="https://files.freemusicarchive.org/storage-freemusicarchive-org/music/ccCommunity/Monplaisir/Au_Bout_De_Ma_Rue/Monplaisir_-_07_-_Yellow_Coldplay_cover.mp3"
+      type="audio/mpeg"
+    ></audio>
+
+    <audio
+      id="clickSound"
+      src="https://www.soundjay.com/buttons/sounds/button-3.mp3"
+    ></audio>
+    <audio
+      id="noSound"
+      src="https://www.soundjay.com/button/beep-07.wav"
+    ></audio>
+
+    <canvas id="confetti"></canvas>
+
+    <script>
+      const yesBtn = document.getElementById("yesBtn");
+      const noBtn = document.getElementById("noBtn");
+      const response = document.getElementById("response");
+      const clickSound = document.getElementById("clickSound");
+      const noSound = document.getElementById("noSound");
+      const musicBtn = document.getElementById("musicBtn");
+      const bgMusic = document.getElementById("bgMusic");
+
+      // Confeti
+      const canvas = document.getElementById("confetti");
+      const ctx = canvas.getContext("2d");
+      let width = (canvas.width = window.innerWidth);
+      let height = (canvas.height = window.innerHeight);
+      window.onresize = () => {
+        width = canvas.width = window.innerWidth;
+        height = canvas.height = window.innerHeight;
+      };
+
+      const confettis = Array(200)
+        .fill()
+        .map(() => ({
+          x: Math.random() * width,
+          y: Math.random() * height - height,
+          r: Math.random() * 6 + 4,
+          d: Math.random() * 5 + 2,
+          color: `hsl(${Math.random() * 360}, 100%, 70%)`,
+        }));
+
+      function drawConfetti() {
+        ctx.clearRect(0, 0, width, height);
+        confettis.forEach((p) => {
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+          ctx.fillStyle = p.color;
+          ctx.fill();
+          p.y += p.d;
+          if (p.y > height) {
+            p.y = -10;
+            p.x = Math.random() * width;
+          }
+        });
+        requestAnimationFrame(drawConfetti);
+      }
+
+      yesBtn.addEventListener("click", () => {
+        clickSound.play();
+        setTimeout(() => {
+          response.innerHTML = "Te amo demasiado Carito, siempre te amaré 💛";
+          drawConfetti();
+        }, 300);
+      });
+
+      noBtn.addEventListener("mouseover", () => {
+        const x = Math.random() * (window.innerWidth - 100);
+        const y = Math.random() * (window.innerHeight - 100);
+        noBtn.style.position = "absolute";
+        noBtn.style.left = `${x}px`;
+        noBtn.style.top = `${y}px`;
+      });
+
+      noBtn.addEventListener("click", () => {
+        clickSound.play();
+        setTimeout(() => {
+          noSound.play();
+          response.innerHTML = "¿Estás segura? 🥺 Intenta de nuevo...";
+        }, 300);
+      });
+
+      musicBtn.addEventListener("click", () => {
+        bgMusic.play();
+        musicBtn.style.display = "none";
+      });
+    </script>
+  </body>
+</html>
