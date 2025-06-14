@@ -97,7 +97,7 @@
   <div id="response"></div>
 
   <button id="musicBtn">🎵 Tocar "Yellow" de Coldplay</button>
-  <audio id="bgMusic" src="yellow.mp3" type="audio/mpeg"></audio>
+  <audio id="bgMusic" src="yellow.mp3" type="audio/mpeg" preload="auto"></audio>
 
   <audio id="clickSound" src="https://www.soundjay.com/buttons/sounds/button-3.mp3"></audio>
   <audio id="noSound" src="https://www.soundjay.com/button/beep-07.wav"></audio>
@@ -171,7 +171,11 @@
     });
 
     musicBtn.addEventListener('click', () => {
-      bgMusic.play();
+      bgMusic.volume = 1;
+      bgMusic.play().catch(e => {
+        alert("No se puede reproducir automáticamente. Intenta hacer clic nuevamente o revisa el volumen del navegador.");
+        console.error(e);
+      });
       musicBtn.style.display = 'none';
     });
   </script>
